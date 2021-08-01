@@ -48,12 +48,7 @@ echo "WEBSITE_FILE = $WEBSITE_FILE"
 echo "GITHUB_REF   = $GITHUB_REF"
 echo "GITHUB_SHA   = $GITHUB_SHA"
 
-if [ "$GITHUB_REF" != "refs/heads/translate" ]; then
-	echo "This isn't branch 'translate'.  Done."
-	exit 0
-fi
-
-pushd "$NEOMUTT_DIR"
+pushd "$NEOMUTT_DIR" > /dev/null
 FILES="$(git diff --name-only "$GITHUB_SHA^..$GITHUB_SHA" -- 'po/*.po')"
 FILE_COUNT="$(echo "$FILES" | wc -w)"
 
@@ -66,11 +61,10 @@ if [ "$FILE_COUNT" = 1 ]; then
 else
 	MESSAGE="update leaderboard"
 fi
-popd
+popd > /dev/null
 
-pushd "$WEBSITE_DIR"
+pushd "$WEBSITE_DIR" > /dev/null
 git add "$WEBSITE_FILE"
 git commit -m "[AUTO] translation: $MESSAGE" -m "[ci skip]"
-git push origin
-popd
+popd > /dev/null
 

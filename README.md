@@ -12,7 +12,7 @@ the [website repo](https://github.com/neomutt/neomutt.github.io).
 
 | Script                                     | Description                                        |
 | :----------------------------------------- | :------------------------------------------------- |
-| [deploy.sh](deploy.sh)                     | Deploy the updated webpage                         |
+| [commit.sh](commit.sh)                     | Commit the updated webpage                         |
 | [generate-webpage.sh](generate-webpage.sh) | Generate the Leaderboard webpage                   |
 | [stats.sh](stats.sh)                       | Validate translations and print some stats         |
 
