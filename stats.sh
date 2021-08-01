@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -o errexit	# set -e
+set -o nounset	# set -u
+
 if [ $# = 0 ]; then
 	[ -d po ] && ARGS="po/*.po" || ARGS="*.po"
 else
@@ -13,8 +16,7 @@ TMP_FILE=$(mktemp)
 for i in $ARGS; do
 	L=${i##*/}
 	echo -ne "${L%.po}:\\t"
-	msgfmt --statistics -c -o /dev/null "$i" 2>&1
-	[ $? = 1 ] && ERROR=1
+	msgfmt --statistics -c -o /dev/null "$i" 2>&1 || ERROR=1
 done > "$TMP_FILE"
 
 sed 's/ \(message\|translation\)s*\.*//g' "$TMP_FILE" | sort -nr -k2 -k4 -k6

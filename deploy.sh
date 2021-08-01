@@ -38,28 +38,27 @@ function calc_percentage()
 }
 
 
-echo "DEPLOY_DIR          = $DEPLOY_DIR"
-echo "DEPLOY_FILE         = $DEPLOY_FILE"
-echo "DEPLOY_REPO         = $DEPLOY_REPO"
-echo "TRAVIS_BRANCH       = $TRAVIS_BRANCH"
-echo "TRAVIS_COMMIT       = $TRAVIS_COMMIT"
-echo "TRAVIS_PULL_REQUEST = $TRAVIS_PULL_REQUEST"
+NEOMUTT_DIR="$1"
+WEBSITE_DIR="$2"
+WEBSITE_FILE="$3"
 
-if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-	echo "This is a Pull Request.  Done."
-	exit 0
-fi
+echo "NEOMUTT_DIR  = $NEOMUTT_DIR"
+echo "WEBSITE_DIR  = $WEBSITE_DIR"
+echo "WEBSITE_FILE = $WEBSITE_FILE"
+echo "GITHUB_REF   = $GITHUB_REF"
+echo "GITHUB_SHA   = $GITHUB_SHA"
 
-if [ "$TRAVIS_BRANCH" != "translate" ]; then
+if [ "$GITHUB_REF" != "refs/heads/translate" ]; then
 	echo "This isn't branch 'translate'.  Done."
 	exit 0
 fi
 
-FILES="$(git diff --name-only "$TRAVIS_COMMIT^..$TRAVIS_COMMIT" -- 'po/*.po')"
+pushd "$NEOMUTT_DIR"
+FILES="$(git diff --name-only "$GITHUB_SHA^..$GITHUB_SHA" -- 'po/*.po')"
 FILE_COUNT="$(echo "$FILES" | wc -w)"
 
 if [ "$FILE_COUNT" = 1 ]; then
-	AUTHOR="$(git log -n1 --format="%aN" "$TRAVIS_COMMIT")"
+	AUTHOR="$(git log -n1 --format="%aN" "$GITHUB_SHA")"
 	PO="${FILES##*/}"
 	PO="${PO%.po}"
 	PCT=$(calc_percentage "$FILES")
@@ -67,18 +66,11 @@ if [ "$FILE_COUNT" = 1 ]; then
 else
 	MESSAGE="update leaderboard"
 fi
+popd
 
-.travis/prep.sh
-
-set -v
-eval "$(ssh-agent -s)"
-ssh-add .travis/travis-deploy-github.pem
-
-git clone "$DEPLOY_REPO" "$DEPLOY_DIR"
-.travis/generate-webpage.sh po/*.po > "$DEPLOY_DIR/$DEPLOY_FILE"
-
-cd "$DEPLOY_DIR"
-git add "$DEPLOY_FILE"
+pushd "$WEBSITE_DIR"
+git add "$WEBSITE_FILE"
 git commit -m "[AUTO] translation: $MESSAGE" -m "[ci skip]"
 git push origin
+popd
 

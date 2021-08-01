@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -o errexit	# set -e
+set -o nounset	# set -u
+
 function lookup_lang()
 {
 	case "${1##*/}" in
