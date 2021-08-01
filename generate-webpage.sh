@@ -50,6 +50,8 @@ function html_header()
 	echo ""
 	echo "<h2>Translating NeoMutt</h2>"
 	echo ""
+	echo "<a href='https://github.com/neomutt/neomutt/actions/workflows/translate.yml'><img align='right' src='https://github.com/neomutt/neomutt/actions/workflows/translate.yml/badge.svg?branch=translate&event=push'></a>"
+	echo ""
 	echo "<p>"
 	echo "  NeoMutt has been translated into 30 languages."
 	echo "  Unfortunately, some of the translations are out-of-date."
