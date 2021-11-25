@@ -53,7 +53,7 @@ FILES="$(git diff --name-only "$GITHUB_SHA^..$GITHUB_SHA" -- 'po/*.po')"
 FILE_COUNT="$(echo "$FILES" | wc -w)"
 
 if [ "$FILE_COUNT" = 1 ]; then
-	AUTHOR="$(git log -n1 --format="%aN" "$GITHUB_SHA")"
+	AUTHOR="$(git log -n1 --format="%aN" "$GITHUB_SHA" | sed 's/(@/(/')"
 	PO="${FILES##*/}"
 	PO="${PO%.po}"
 	PCT=$(calc_percentage "$FILES")
