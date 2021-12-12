@@ -6,40 +6,68 @@ set -o nounset	# set -u
 function lookup_lang()
 {
 	case "${1##*/}" in
-		eu)    IMG="basque.png";              NAME="Basque";;
-		bg)    IMG="bulgarian.png";           NAME="Bulgarian";;
-		ca)    IMG="catalan.png";             NAME="Catalan";;
-		zh_CN) IMG="chinese-simplified.png";  NAME="Chinese (Simplified)";;
-		zh_TW) IMG="chinese-traditional.png"; NAME="Chinese (Traditional)";;
-		cs)    IMG="czech.png";               NAME="Czech";;
-		da)    IMG="danish.png";              NAME="Danish";;
-		nl)    IMG="dutch.png";               NAME="Dutch";;
-		en_GB) IMG="english.png";             NAME="English (British)";;
-		eo)    IMG="esperanto.png";           NAME="Esperanto";;
-		et)    IMG="estonian.png";            NAME="Estonian";;
-		fi)    IMG="finnish.png";             NAME="Finnish";;
-		fr)    IMG="french.png";              NAME="French";;
-		gl)    IMG="galician.png";            NAME="Galician";;
-		de)    IMG="german.png";              NAME="German";;
-		el)    IMG="greek.png";               NAME="Greek";;
-		hu)    IMG="hungarian.png";           NAME="Hungarian";;
-		id)    IMG="indonesian.png";          NAME="Indonesian";;
-		ga)    IMG="irish.png";               NAME="Irish";;
-		it)    IMG="italian.png";             NAME="Italian";;
-		ja)    IMG="japanese.png";            NAME="Japanese";;
-		ko)    IMG="korean.png";              NAME="Korean";;
-		lt)    IMG="lithuanian.png";          NAME="Lithuanian";;
-		nb_NO) IMG="norwegian.png";           NAME="Norwegian (Bokmål)";;
-		pl)    IMG="polish.png";              NAME="Polish";;
-		pt_BR) IMG="portuguese-brazil.png";   NAME="Portuguese (Brazil)";;
-		ru)    IMG="russian.png";             NAME="Russian";;
-		sk)    IMG="slovak.png";              NAME="Slovak";;
-		sr)    IMG="serbian.png";             NAME="Serbian";;
-		es)    IMG="spanish.png";             NAME="Spanish";;
-		sv)    IMG="swedish.png";             NAME="Swedish";;
-		tr)    IMG="turkish.png";             NAME="Turkish";;
-		uk)    IMG="ukrainian.png";           NAME="Ukrainian";;
+		eu)    IMG="basque.png";              EMOJI="";                 NAME="Basque";;
+		bg)    IMG="bulgarian.png";           EMOJI=":bulgaria:";       NAME="Bulgarian";;
+		ca)    IMG="catalan.png";             EMOJI="";                 NAME="Catalan";;
+		zh_CN) IMG="chinese-simplified.png";  EMOJI=":cn:";             NAME="Chinese (Simplified)";;
+		zh_TW) IMG="chinese-traditional.png"; EMOJI=":taiwan:";         NAME="Chinese (Traditional)";;
+		cs)    IMG="czech.png";               EMOJI=":czech_republic:"; NAME="Czech";;
+		da)    IMG="danish.png";              EMOJI=":denmark:";        NAME="Danish";;
+		nl)    IMG="dutch.png";               EMOJI=":netherlands:";    NAME="Dutch";;
+		en_GB) IMG="english.png";             EMOJI=":uk:";             NAME="English (British)";;
+		eo)    IMG="esperanto.png";           EMOJI="";                 NAME="Esperanto";;
+		et)    IMG="estonian.png";            EMOJI=":estonia:";        NAME="Estonian";;
+		fi)    IMG="finnish.png";             EMOJI=":finland:";        NAME="Finnish";;
+		fr)    IMG="french.png";              EMOJI=":fr:";             NAME="French";;
+		gl)    IMG="galician.png";            EMOJI="";                 NAME="Galician";;
+		de)    IMG="german.png";              EMOJI=":de:";             NAME="German";;
+		el)    IMG="greek.png";               EMOJI=":greece:";         NAME="Greek";;
+		hu)    IMG="hungarian.png";           EMOJI=":hungary:";        NAME="Hungarian";;
+		id)    IMG="indonesian.png";          EMOJI=":indonesia:";      NAME="Indonesian";;
+		ga)    IMG="irish.png";               EMOJI=":ireland:";        NAME="Irish";;
+		it)    IMG="italian.png";             EMOJI=":it:";             NAME="Italian";;
+		ja)    IMG="japanese.png";            EMOJI=":jp:";             NAME="Japanese";;
+		ko)    IMG="korean.png";              EMOJI=":kr:";             NAME="Korean";;
+		lt)    IMG="lithuanian.png";          EMOJI=":lithuania:";      NAME="Lithuanian";;
+		nb_NO) IMG="norwegian.png";           EMOJI=":norway:";         NAME="Norwegian (Bokmål)";;
+		pl)    IMG="polish.png";              EMOJI=":poland:";         NAME="Polish";;
+		pt_BR) IMG="portuguese-brazil.png";   EMOJI=":brazil:";         NAME="Portuguese (Brazil)";;
+		ru)    IMG="russian.png";             EMOJI=":ru:";             NAME="Russian";;
+		sk)    IMG="slovak.png";              EMOJI=":slovakia:";       NAME="Slovak";;
+		sr)    IMG="serbian.png";             EMOJI=":serbia:";         NAME="Serbian";;
+		es)    IMG="spanish.png";             EMOJI=":es:";             NAME="Spanish";;
+		sv)    IMG="swedish.png";             EMOJI=":sweden:";         NAME="Swedish";;
+		tr)    IMG="turkish.png";             EMOJI=":tr:";             NAME="Turkish";;
+		uk)    IMG="ukrainian.png";           EMOJI=":ukraine:";        NAME="Ukrainian";;
 	esac
+}
+
+function parse_line()
+{
+	local LINE="$1"
+	# filename: 104 translated, 22 fuzzy, 11 untranslated
+	if [[ "$LINE" =~ (.*):[[:space:]]+([0-9]+)[[:space:]]translated,[[:space:]]([0-9]+)[[:space:]]fuzzy,[[:space:]]([0-9]+)[[:space:]]untranslated ]]; then
+		LANG="${BASH_REMATCH[1]}"
+		TNUM=${BASH_REMATCH[2]} # translated
+		FNUM=${BASH_REMATCH[3]} # fuzzy
+		UNUM=${BASH_REMATCH[4]} # untranslated
+	# filename: 320 translated, 20 untranslated
+	elif [[ "$LINE" =~ (.*):[[:space:]]+([0-9]+)[[:space:]]translated,[[:space:]]([0-9]+)[[:space:]]untranslated ]]; then
+		LANG="${BASH_REMATCH[1]}"
+		TNUM=${BASH_REMATCH[2]} # translated
+		UNUM=${BASH_REMATCH[3]} # untranslated
+	# filename: 5 translated, 13 fuzzy
+	elif [[ "$LINE" =~ (.*):[[:space:]]+([0-9]+)[[:space:]]translated,[[:space:]]([0-9]+)[[:space:]]fuzzy ]]; then
+		LANG="${BASH_REMATCH[1]}"
+		TNUM=${BASH_REMATCH[2]} # translated
+		FNUM=${BASH_REMATCH[3]} # fuzzy
+	# filename: 63 translated
+	elif [[ "$LINE" =~ (.*):[[:space:]]+([0-9]+)[[:space:]]translated ]]; then
+		LANG="${BASH_REMATCH[1]}"
+		TNUM=${BASH_REMATCH[2]} # translated
+	else
+		return
+	fi
 }
 
 function html_header()
@@ -88,35 +116,12 @@ function html_header()
 
 function html_line()
 {
-	local LINE="$1"
 	local LANG=""
 	local TNUM=0
 	local FNUM=0
 	local UNUM=0
 
-	# filename: 104 translated, 22 fuzzy, 11 untranslated
-	if [[ "$LINE" =~ (.*):[[:space:]]+([0-9]+)[[:space:]]translated,[[:space:]]([0-9]+)[[:space:]]fuzzy,[[:space:]]([0-9]+)[[:space:]]untranslated ]]; then
-		LANG="${BASH_REMATCH[1]}"
-		TNUM=${BASH_REMATCH[2]} # translated
-		FNUM=${BASH_REMATCH[3]} # fuzzy
-		UNUM=${BASH_REMATCH[4]} # untranslated
-	# filename: 320 translated, 20 untranslated
-	elif [[ "$LINE" =~ (.*):[[:space:]]+([0-9]+)[[:space:]]translated,[[:space:]]([0-9]+)[[:space:]]untranslated ]]; then
-		LANG="${BASH_REMATCH[1]}"
-		TNUM=${BASH_REMATCH[2]} # translated
-		UNUM=${BASH_REMATCH[3]} # untranslated
-	# filename: 5 translated, 13 fuzzy
-	elif [[ "$LINE" =~ (.*):[[:space:]]+([0-9]+)[[:space:]]translated,[[:space:]]([0-9]+)[[:space:]]fuzzy ]]; then
-		LANG="${BASH_REMATCH[1]}"
-		TNUM=${BASH_REMATCH[2]} # translated
-		FNUM=${BASH_REMATCH[3]} # fuzzy
-	# filename: 63 translated
-	elif [[ "$LINE" =~ (.*):[[:space:]]+([0-9]+)[[:space:]]translated ]]; then
-		LANG="${BASH_REMATCH[1]}"
-		TNUM=${BASH_REMATCH[2]} # translated
-	else
-		return
-	fi
+	parse_line "$1"
 
 	lookup_lang "$LANG"
 
@@ -158,19 +163,85 @@ function html_footer()
 	echo "Last updated: $(date --utc '+%F %R') UTC"
 }
 
+function html_output()
+{
+	local ARGS="$*"
+	html_header
+	for i in $ARGS; do
+		echo -ne "${i%.po}:\t"
+		msgfmt --statistics -c -o /dev/null "$i" 2>&1
+	done \
+		| grep -wv "en_GB" \
+		| sed 's/ \(message\|translation\)s*\.*//g' \
+		| sort -nr -k2 -k4 -k6 \
+		| while read -r line; do
+		html_line "$line"
+	done
+	html_footer
+}
+
+function text_header()
+{
+	echo "Translations Rebased"
+	echo "[**Leaderboard**](https://neomutt.org/translate)"
+	echo ""
+	echo "| Done | Language  | To Do |"
+	echo "| ---: | :-------- | :---- |"
+}
+
+function text_line()
+{
+	local LANG=""
+	local TNUM=0
+	local FNUM=0
+	local UNUM=0
+
+	parse_line "$1"
+
+	lookup_lang "$LANG"
+
+	local TOTAL=$((TNUM+FNUM+UNUM)) # number of translated strings
+	local PC=$((100*TNUM/TOTAL)) # percentage complete
+
+	local TITLE=""
+	[ "$FNUM" -gt 0 ] && TITLE="$FNUM fuzzy"
+	[ "$UNUM" -gt 0 ] && TITLE="$TITLE, $UNUM untranslated"
+	[ -z "$TITLE" ] && TITLE="Complete :heart:"
+
+	echo "| $PC% | $EMOJI $NAME | $TITLE |"
+}
+
+function text_output()
+{
+	local ARGS="$*"
+	text_header
+	for i in $ARGS; do
+		echo -ne "${i%.po}:\t"
+		msgfmt --statistics -c -o /dev/null "$i" 2>&1
+	done \
+		| grep -wv "en_GB" \
+		| sed 's/ \(message\|translation\)s*\.*//g' \
+		| sort -nr -k2 -k4 -k6 \
+		| head -n 10 \
+		| while read -r line; do
+		# html_line "$line"
+		text_line "$line"
+	done
+}
+
+
+if [ $# -gt 0 ] && [ "$1" = "-t" ]; then
+	OUTPUT="text"
+	shift
+else
+	OUTPUT="html"
+fi
 
 [ $# = 0 ] && ARGS="*.po" || ARGS="$*"
 
-html_header
-for i in $ARGS; do
-	echo -ne "${i%.po}:\t"
-	msgfmt --statistics -c -o /dev/null "$i" 2>&1
-done \
-	| grep -wv "en_GB" \
-	| sed 's/ \(message\|translation\)s*\.*//g' \
-	| sort -nr -k2 -k4 -k6 \
-	| while read -r line; do
-	html_line "$line"
-done
-html_footer
+if [ "$OUTPUT" = "text" ]; then
+	text_output "$ARGS"
+else
+	html_output "$ARGS"
+fi
 
