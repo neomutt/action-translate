@@ -10,11 +10,12 @@ the [website repo](https://github.com/neomutt/neomutt.github.io).
 
 ## Scripts
 
-| Script                                     | Description                                        |
-| :----------------------------------------- | :------------------------------------------------- |
-| [commit.sh](commit.sh)                     | Commit the updated webpage                         |
-| [generate-webpage.sh](generate-webpage.sh) | Generate the Leaderboard webpage                   |
-| [stats.sh](stats.sh)                       | Validate translations and print some stats         |
+| Script                                     | Description                                         |
+| :----------------------------------------- | :-------------------------------------------------- |
+| [commit.sh](commit.sh)                     | Commit the updated webpage                          |
+| [generate-webpage.sh](generate-webpage.sh) | Generate the Leaderboard webpage                    |
+| [post-team.sh](post-team.sh)               | Post a message to the Translators' Discussion Board |
+| [stats.sh](stats.sh)                       | Validate translations and print some stats          |
 
 ## Screenshot
 
