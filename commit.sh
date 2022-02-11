@@ -65,6 +65,6 @@ popd > /dev/null
 
 pushd "$WEBSITE_DIR" > /dev/null
 git add "$WEBSITE_FILE"
-git commit -m "[AUTO] translation: $MESSAGE" -m "[ci skip]"
+git commit -m "[AUTO] translation: $MESSAGE"
 popd > /dev/null
 
