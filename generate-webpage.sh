@@ -205,7 +205,8 @@ function text_line()
 
 	local TITLE=""
 	[ "$FNUM" -gt 0 ] && TITLE="$FNUM fuzzy"
-	[ "$UNUM" -gt 0 ] && TITLE="$TITLE, $UNUM untranslated"
+	[ "$UNUM" -gt 0 ] && [ "$FNUM" -gt 0 ] && TITLE="$TITLE, "
+	[ "$UNUM" -gt 0 ] && TITLE="$TITLE$UNUM untranslated"
 	[ -z "$TITLE" ] && TITLE="Complete :heart:"
 
 	echo "| $PC% | $EMOJI $NAME | $TITLE |"
