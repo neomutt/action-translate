@@ -223,7 +223,7 @@ function text_output()
 		| grep -wv "en_GB" \
 		| sed 's/ \(message\|translation\)s*\.*//g' \
 		| sort -nr -k2 -k4 -k6 \
-		| head -n 10 \
+		| head -n 15 \
 		| while read -r line; do
 		# html_line "$line"
 		text_line "$line"
