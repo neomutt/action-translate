@@ -228,6 +228,9 @@ function text_output()
 		# html_line "$line"
 		text_line "$line"
 	done
+	echo
+	echo "@neomutt/translators"
+	echo
 }
 
 
