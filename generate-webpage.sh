@@ -15,7 +15,7 @@ function lookup_lang()
 		da)    IMG="danish.png";              EMOJI=":denmark:";        NAME="Danish";;
 		nl)    IMG="dutch.png";               EMOJI=":netherlands:";    NAME="Dutch";;
 		en_GB) IMG="english.png";             EMOJI=":uk:";             NAME="English (British)";;
-		eo)    IMG="esperanto.png";           EMOJI="";                 NAME="Esperanto";;
+		eo)    IMG="esperanto.png";           EMOJI=":eight_spoked_asterisk:"; NAME="Esperanto";;
 		et)    IMG="estonian.png";            EMOJI=":estonia:";        NAME="Estonian";;
 		fi)    IMG="finnish.png";             EMOJI=":finland:";        NAME="Finnish";;
 		fr)    IMG="french.png";              EMOJI=":fr:";             NAME="French";;
